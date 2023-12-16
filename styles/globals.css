@@ -21,9 +21,9 @@ body {
 }
 
 #__next {
-  @apply h-4
+  @apply h-full
 }
 
 html {
-  @apply h-4
+  @apply h-full
 }
