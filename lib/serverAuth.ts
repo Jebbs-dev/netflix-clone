@@ -1,17 +1,19 @@
 import { NextApiRequest } from "next";
-import { getSession } from "next-auth/react";
+import { getToken } from "next-auth/jwt";
 import prismadb from "@/lib/prismadb";
 
-const serverAuth = async (req: NextApiRequest) => {
-  const session = await getSession({ req });
 
-  if (!session?.user?.email) {
+const serverAuth = async (req: NextApiRequest) => {
+  const secret = process.env.NEXTAUTH_JWT_SECRET
+  const token = await getToken({ req, secret })
+
+  if (!token?.email) {
     throw new Error("Not signed in");
   }
 
   const currentUser = await prismadb.user.findUnique({
     where: {
-      email: session?.user.email,
+      email: token?.email,
     },
   });
 
@@ -23,5 +25,3 @@ const serverAuth = async (req: NextApiRequest) => {
 };
 
 export default serverAuth;
-
-// serverAuth is going to be used in all of our API routes to check if user is logged in.
