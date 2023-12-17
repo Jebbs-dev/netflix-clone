@@ -21,7 +21,7 @@ export default async function handler(
     });
 
     if (existingUser) {
-      res.status(422).json({ error: "Email taken" });
+      return res.status(422).json({ error: "Email taken" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -36,7 +36,7 @@ export default async function handler(
       },
     });
 
-    res.status(200).json(user);
+    return res.status(200).json(user);
 
   } catch (error) {
     console.log(error);
